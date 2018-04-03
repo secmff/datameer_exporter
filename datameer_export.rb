@@ -33,7 +33,7 @@ def user_management(site, section)
   mkdir base
   section_names = JSON[site[section].get]
   if section_names['maxResults'] < section_names['total']
-    section_names = JSON[site[section].get(maxResults: section_names['total'])]
+    section_names = JSON[site["#{section}?maxResults=#{section_names['total']}"].get]
   end
   section_names['elements'].each do |element|
     id = element['username']
