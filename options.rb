@@ -20,11 +20,16 @@ class Options < OpenStruct
     self.user   = 'admin'
     self.passwd = 'admin'
     self.output = '.'
+    self.init   = false
   end
 
   def parse
     OptionParser.new do |opts|
       opts.banner = "Usage: #{File.basename($0)} -h <host> -p <port>"
+
+      opts.on('-i', '--initialze', 'initialize the users?') do
+        self.init = true
+      end
 
       opts.on('-h', '--host HOST', 'datameer hostname HOST') do |arg|
         self.host = arg
