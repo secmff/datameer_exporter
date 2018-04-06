@@ -1,14 +1,18 @@
-require 'pp'
+
 require 'net/http'
 require 'uri'
 
-require_relative 'helpers'
-require_relative 'import_section'
+require 'helpers'
+require 'import_section'
 
 
 class UserManagement < ImportSection
   def update(item, _id)
     @site[u("#{@section}/#{name(item)}")].put(update_item(item))
+  end
+
+  def delete(item)
+    @site[u("#{@section}/#{name(item)}")].delete
   end
 
   def name(item)
@@ -19,15 +23,20 @@ class UserManagement < ImportSection
     name(a) == name(b)
   end
 
-  def find_and_remove(item)
-    i = current.index { |a| same?(a, item) }
-    i && @current.delete_at(i)
+  def update_state(item, id)
+    id
+  end
+
+  def find(item)
+    current.select { |a| same?(a, item) }.first
   end
 
   def current_items
     items = JSON[@site[@section].get]
     if items['maxResults'] < items['total']
-      items = JSON[@site["#{@section}?maxResults=#{items['total']}"].get]
+      items = JSON[@site[@section].get(params: {
+                                         'maxResults' => items['total']
+                                       })]
     end
     items['elements']
   end
@@ -104,7 +113,7 @@ class UserManagementUsers < UserManagement
     response = http.request(request)
   end
 
-  def find_and_remove(item)
+  def find(item)
     user = super(item)
     JSON[@site["user-management/users/#{name(user)}"].get] if user
   end

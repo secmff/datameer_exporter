@@ -3,8 +3,9 @@
 require 'rest-client'
 require 'json'
 
-require_relative 'options'
-require_relative 'helpers'
+$LOAD_PATH << File.join(File.dirname(__FILE__), 'lib')
+require 'options'
+require 'helpers'
 
 @options = Options.new
 

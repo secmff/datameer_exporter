@@ -2,7 +2,7 @@
 require 'optparse'
 require 'ostruct'
 
-require_relative 'helpers'
+require 'helpers'
 
 class Options < OpenStruct
   def initialize
@@ -14,13 +14,16 @@ class Options < OpenStruct
   private
 
   def defaults
-    self.proto  = 'http'
-    self.host   = 'localhost'
-    self.port   = 8080
-    self.user   = 'admin'
-    self.passwd = 'admin'
-    self.output = '.'
-    self.init   = false
+    self.proto    = 'http'
+    self.host     = 'localhost'
+    self.port     = 8080
+    self.user     = 'admin'
+    self.passwd   = 'admin'
+    self.output   = '.'
+    self.inituser = false
+    self.upload   = false
+    self.webhdfs  = 'http://localhost:50075'
+    self.datanode = 'localhost:8020'
   end
 
   def parse
@@ -28,7 +31,11 @@ class Options < OpenStruct
       opts.banner = "Usage: #{File.basename($0)} -h <host> -p <port>"
 
       opts.on('-i', '--initialze', 'initialize the users?') do
-        self.init = true
+        self.inituser = true
+      end
+
+      opts.on('-f', '--file-upload', 'upload the data files') do
+        self.upload = true
       end
 
       opts.on('-h', '--host HOST', 'datameer hostname HOST') do |arg|
@@ -49,6 +56,14 @@ class Options < OpenStruct
 
       opts.on('-s', '--proto PROTO', 'datameer protocol PROTO') do |arg|
         self.proto = arg
+      end
+
+      opts.on('-w', '--webhdfs URL', 'hadoop webhdfs URL') do |arg|
+        self.webhdfs = arg
+      end
+
+      opts.on('-d', '--datanode URL', 'hadoop datanode URL') do |arg|
+        self.datanode = arg
       end
 
       opts.on('-o', '--output DIRECTORY', 'configuration output DIRECTORY') do |arg|
