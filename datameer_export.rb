@@ -53,6 +53,8 @@ download_config(site, 'import-job') do |base, id, job_json|
   File.write(File.join(base, id, 'sheet.json'), site["sheet-details/#{id}"].get)
   job = JSON[job_json]
 
+  next unless @options.upload
+
   # download the uploaded files
   if job['properties'].has_key?('file')
     job['properties']['file'].each do |fn|
