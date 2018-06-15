@@ -19,5 +19,6 @@ class Connections < ImportSection
        dataStoreTemplate).each do |key|
       item['properties'].delete(key)
     end
+    item
   end
 end
