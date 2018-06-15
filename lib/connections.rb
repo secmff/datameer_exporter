@@ -12,10 +12,11 @@ class Connections < ImportSection
     a == b
   end
 
-  def cleanup_before_compare(item)
+  def cleanup_before_compare(original)
+    item = original.clone
     item.delete('version')
     item['file'].delete('uuid')
-    %w(password sshKey tableau_password jdbc_connection_authentication_type
+    %w(password sshKey tableau.password jdbc_connection_authentication_type
        dataStoreTemplate).each do |key|
       item['properties'].delete(key)
     end
