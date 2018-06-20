@@ -24,6 +24,7 @@ class Options < OpenStruct
     self.upload   = false
     self.webhdfs  = 'http://localhost:50075'
     self.datanode = 'localhost:8020'
+    self.force    = false
   end
 
   def parse
@@ -34,8 +35,12 @@ class Options < OpenStruct
         self.inituser = true
       end
 
-      opts.on('-f', '--file-upload', 'upload the data files') do
+      opts.on('-r', '--file-upload', 'upload the data files') do
         self.upload = true
+      end
+
+      opts.on('-f', '--force', 'force updating configuration') do
+        self.force = true
       end
 
       opts.on('-h', '--host HOST', 'datameer hostname HOST') do |arg|
