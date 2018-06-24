@@ -7,6 +7,7 @@ class Connections < ImportSection
   end
 
   def compare(a, b)
+    return false if @options.force
     a = cleanup_before_compare(a)
     b = cleanup_before_compare(b)
     a == b
