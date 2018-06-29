@@ -8,13 +8,19 @@ class Connections < ImportSection
 
   def compare(a, b)
     return false if @options.force
-    a = cleanup_before_compare(a)
-    b = cleanup_before_compare(b)
+    a = cleanup_before_compare(copy_of(a))
+    b = cleanup_before_compare(copy_of(b))
     a == b
   end
 
-  def cleanup_before_compare(original)
-    item = original.clone
+  def copy_of(original)
+    item = original.dup
+    item['file'] = original['file'].dup
+    item['properties'] = original['properties'].dup
+    item
+  end
+
+  def cleanup_before_compare(item)
     item.delete('version')
     item['file'].delete('uuid')
     %w(password sshKey tableau.password jdbc_connection_authentication_type
